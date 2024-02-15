@@ -38,7 +38,7 @@ jobs:
 
       - name: Run application
         run: |
-          python application.py &
+          python Application.py &
 
       - name: Wait for application to start
         run: sleep 10
