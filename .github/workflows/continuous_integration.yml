@@ -1,0 +1,42 @@
+name: Compile Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.txt'
+      - '**.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Compile code
+      run: |
+        # Add commands to compile your code here
+        # For example, if it's a Python project:
+        python -m compileall .
+
+    - name: Check compilation error
+      run: |
+        # Add commands to check for compilation errors here
+        # For example, if it's a Python project:
+        if [ $? -ne 0 ]; then
+          echo "Compilation failed"
+          exit 1
+        fi
