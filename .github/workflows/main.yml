@@ -17,6 +17,7 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust 
       
         ports:
           - 5432:5432
@@ -38,7 +39,7 @@ jobs:
 
       - name: Run application
         run: |
-          python application.py &
+          python Application.py &
 
       - name: Wait for application to start
         run: sleep 10
