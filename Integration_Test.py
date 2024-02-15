@@ -61,3 +61,4 @@ if __name__ == "__main__":
     
     # Update account using the retrieved account data
     test_update_account(account_data)
+    print("checking this with the git action workflow")
