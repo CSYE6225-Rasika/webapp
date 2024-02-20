@@ -1,4 +1,4 @@
-name: Assignment3(db_and_Integration)
+name: Assignment3
 
 on:
   pull_request:
