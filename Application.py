@@ -15,8 +15,6 @@ import base64
 
 
 
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/user_databse'
 db = SQLAlchemy(app)
