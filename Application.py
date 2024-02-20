@@ -11,6 +11,7 @@ import re
 from functools import wraps
 from datetime import datetime
 import base64
+import uuid
 
 
 
@@ -32,15 +33,15 @@ class User(db.Model):
     account_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-def table_exists():
-    inspector = db.inspect(db.engine)
-    return 'user_info' in inspector.get_table_names()
+
+
 
 @app.route('/v1/user', methods=['POST'])
 def create_user():
     data = request.json
 
-   
+    
+
     required_fields = ['first_name', 'last_name', 'password', 'username']
     for field in required_fields:
         if field not in data:
@@ -48,9 +49,7 @@ def create_user():
         if field == 'username' and not re.match(r"[^@]+@[^@]+\.[^@]+", data['username']):
             return jsonify({'message': 'Invalid email format'}), 400
     
-    if not table_exists():
-        
-        db.create_all()
+    
 
     
     existing_user = User.query.filter_by(username=data['username']).first()
@@ -196,6 +195,8 @@ def health_check_database():
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(host='0.0.0.0', port=8080, debug=True)
     
 #REFERENCES
