@@ -59,5 +59,9 @@ if __name__ == "__main__":
     # Create account and get account data
     account_data = test_create_account()
     
-    # Update account using the retrieved account data
+
     test_update_account(account_data)
+    print("checking this with the git action workflow")
+
+    test_update_account(account_data)
+
