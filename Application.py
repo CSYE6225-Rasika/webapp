@@ -16,6 +16,7 @@ from urllib.parse import quote as url_quote
 
 
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/user_databse'
 db = SQLAlchemy(app)
