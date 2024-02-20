@@ -63,5 +63,4 @@ if __name__ == "__main__":
     test_update_account(account_data)
     print("checking this with the git action workflow")
 
-    test_update_account(account_data)
 
