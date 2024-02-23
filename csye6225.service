@@ -1,0 +1,13 @@
+[Unit]
+Description=healthcheck_app
+After=network.target
+
+[Service]
+User=csye6225
+Group=csye6225
+WorkingDirectory=/home/csye6225/application/healthcheck-0.1
+ExecStart=/usr/bin/python3 Application.py   
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

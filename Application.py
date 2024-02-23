@@ -193,11 +193,16 @@ def health_check_database():
         error_response.headers['Cache-Control'] = 'no-cache'
         return error_response
 
-
-if __name__ == '__main__':
+def main():
     with app.app_context():
         db.create_all()
     app.run(host='0.0.0.0', port=8080, debug=True)
+
+
+if __name__ == '__main__':
+
+    main()
+
     
 #REFERENCES
 #API — Flask Documentation (3.0.X). (n.d.). https://flask.palletsprojects.com/en/3.0.x/api/
