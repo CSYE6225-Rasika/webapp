@@ -6,7 +6,6 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy_utils import database_exists, create_database
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
-import jwt
 import re
 from functools import wraps
 from datetime import datetime
