@@ -12,8 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run packer fmt
-        run: packer fmt -check -diff
+      - name: Check for .pkr.hcl files
+        run: |
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, running packer fmt..."
+            packer fmt -check -diff
+          else
+            echo "No .pkr.hcl files found, skipping packer fmt check."
+          fi
 
       - name: Run packer validate
         run: packer validate path/to/your/packer/template.json
@@ -21,7 +27,12 @@ jobs:
   build_custom_image:
     runs-on: ubuntu-latest
     needs: packer_status_check
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' &&
+      contains(github.event.pull_request.changed_files, '.pkr.hcl')
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -37,10 +48,7 @@ jobs:
         run: |
           python setup.py sdist --format=gztar
 
-
       - name: Build custom image
         run: |
           packer init Packer.pkr.hcl
           packer build Packer.pkr.hcl
-
-    
