@@ -45,10 +45,7 @@ jobs:
 
     
       - name: Authenticate with service account
-        with:
-          SA_KEY: ${{ secrets.SA_KEY }}
-          SA_EMAIL: ${{ secrets.SA_EMAIL }}
-          run: gcloud auth activate-service-account $(echo "$SA_EMAIL") --key-file=<(echo "$SA_KEY")
+        run: gcloud auth activate-service-account ${{ secrets.SA_EMAIL }} --key-file=<(echo "${{ secrets.SA_KEY }}")
 
       - name: Setup gcloud SDK
         uses: google-github-actions/setup-gcloud@v0.4.0
