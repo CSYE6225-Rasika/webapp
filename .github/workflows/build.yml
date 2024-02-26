@@ -43,7 +43,10 @@ jobs:
         with:
           project_id: ${{ secrets.PROJECT_ID }}
           service_account_key: ${{ secrets.SA_KEY }}
-          export_default_credentials: false
+          
+      - name: Authenticate with Google Cloud SDK
+        run: gcloud auth activate-service-account --key-file=${{ secrets.SA_KEY }}
+         
           
 
       - name: Build application artifact
