@@ -19,7 +19,7 @@ jobs:
           # Check if .pkr.hcl files exist
           if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
             echo ".pkr.hcl files found, running packer fmt..."
-            if packer fmt -check -diff -write=false; then
+            if packer fmt -check -write=false .; then
               echo "Packer templates are properly formatted."
             else
               echo "Packer templates need formatting. Please format the templates using 'packer fmt' and push the changes."
