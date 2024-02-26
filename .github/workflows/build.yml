@@ -49,6 +49,9 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
+      - name: Navigate to the directory containing setup.py
+        run: cd webapp
+
       - name: Build application artifact
         run: python setup.py sdist --format=gztar
 
