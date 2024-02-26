@@ -86,7 +86,7 @@ build {
   }
 
   provisioner "file" {
-    source      = "requirements.txt"
+    source      = " requirements.txt"
     destination = "/home/csye6225/application/requirements.txt"
   }
 
