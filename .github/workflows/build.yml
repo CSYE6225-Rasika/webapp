@@ -36,23 +36,16 @@ jobs:
 
     
     steps:
-      - name: Debug Workflow Environment
-        run: env
-      - name: Checkout code
-        uses: actions/checkout@v2
-        
-      - name: Debug SA_KEY
-        run: echo "SA_KEY:${{ secrets.SA_KEY }}"
-             echo "SA_EMAIL:${{ secrets.SA_EMAIL }}"
-
-    
-      - name: Authenticate with service account (using setup-gcloud action)
-        uses: google-github-actions/setup-gcloud@v0.4.0
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
         with:
-          service_account_email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-          project_id: ${{ secrets.PROJECT_ID }}
-          export_default_credentials: true
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
          
           
 
