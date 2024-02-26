@@ -40,12 +40,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Write service account key to file
+        run: echo '${{ secrets.SA_KEY }}' | base64 --decode > key.json
+
       - name: Authenticate with GCP
-        run: |
-          echo "$SA_KEY" > key.json
-          gcloud auth activate-service-account --key-file=key.json
-        env:
-          SA_KEY: ${{ secrets.SA_KEY }}
+        run: gcloud auth activate-service-account --key-file=key.json
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
