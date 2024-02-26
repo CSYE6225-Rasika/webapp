@@ -19,7 +19,7 @@ variable "image_name" {
 }
 
 variable "instance_name" {
-  default = "centos8" 
+  default = "centos8"
 }
 
 variable "network" {
@@ -27,14 +27,14 @@ variable "network" {
 }
 
 source "googlecompute" "csye6225" {
-  project_id           = var.project_id
-  source_image_family  = var.source_image_family
-  zone                 = var.zone
-  ssh_username         = var.ssh_username
-  image_name           = var.image_name
-  instance_name        = var.instance_name
-  disk_size            = 20
-  
+  project_id          = var.project_id
+  source_image_family = var.source_image_family
+  zone                = var.zone
+  ssh_username        = var.ssh_username
+  image_name          = var.image_name
+  instance_name       = var.instance_name
+  disk_size           = 20
+
 }
 
 build {
@@ -44,7 +44,7 @@ build {
 
 
 
-  
+
 
   provisioner "shell" {
     inline = [
@@ -62,31 +62,31 @@ build {
       "sudo systemctl restart postgresql",
       "pip3 install setuptools",
       "sudo chmod 777 /etc/systemd/system/",
-      
-      
-      
-      ]
+
+
+
+    ]
   }
-  provisioner "file"{
-      source      = "csye6225.service"
-      destination = "/etc/systemd/system/csye6225.service"
-    }
-    
-    provisioner "file" {
-      source      = "dist/healthcheck-0.1.tar.gz"
-      destination = "/home/csye6225/application/healthcheck-0.1.tar.gz"
+  provisioner "file" {
+    source      = "csye6225.service"
+    destination = "/etc/systemd/system/csye6225.service"
   }
 
   provisioner "file" {
-      source      = "requirements.txt"
-      destination = "/home/csye6225/application/requirements.txt"
+    source      = "dist/healthcheck-0.1.tar.gz"
+    destination = "/home/csye6225/application/healthcheck-0.1.tar.gz"
   }
-  
+
+  provisioner "file" {
+    source      = "requirements.txt"
+    destination = "/home/csye6225/application/requirements.txt"
+  }
+
 
 
   provisioner "shell" {
     inline = [
-      
+
       "sudo yum -y install python3-devel",
       "sudo yum groupinstall -y 'Development Tools'",
       "sudo pip3 install greenlet",
@@ -99,8 +99,8 @@ build {
       "sudo systemctl daemon-reload",
       "sudo  systemctl enable --now csye6225",
       "sudo systemctl start csye6225"
-      ]
+    ]
   }
-    
+
 
 }
