@@ -41,7 +41,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Write service account key to file
-        run: echo '${{ secrets.SA_KEY }}' | base64 --decode > key.json
+        run: |
+          echo "Encoded service account key: ${{ secrets.SA_KEY }}"
+          echo '${{ secrets.SA_KEY }}' | base64 --decode > key.json
 
       - name: Authenticate with GCP
         run: gcloud auth activate-service-account --key-file=key.json
