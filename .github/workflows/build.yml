@@ -4,11 +4,8 @@ on:
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - '**/*.yml'
-      - '**/*.py'
-      - '**/*.txt'
-      - '**/*.service'
+    paths:
+      - 'Packer.pkr.hcl'
 
 jobs:
   packer_status_check:
