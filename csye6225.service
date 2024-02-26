@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=csye6225
 Group=csye6225
-WorkingDirectory=/home/csye6225/application/healthcheck-0.1
-ExecStart=/usr/bin/python3 Application.py   
+WorkingDirectory=/usr/bin/
+ExecStart=python3 -m Application  
 Restart=always
 
 [Install]

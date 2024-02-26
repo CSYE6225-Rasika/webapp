@@ -7,6 +7,6 @@ bcrypt==3.2.0
 PyJWT==2.3.0
 psycopg2.binary
 sqlalchemy-utils==0.37.7
-requests==2.28.1
+requests
 Werkzeug==2.0.3
 Faker
