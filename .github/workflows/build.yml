@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'Packer.pkr.hcl'
+      - '*.pkr.hcl'
 
 jobs:
   packer_status_check:
@@ -14,11 +14,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run packer fmt
-        run: packer fmt -check -diff
+      - name: Check for .pkr.hcl files and format
+        run: |
+          # Check if .pkr.hcl files exist
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, running packer fmt..."
+            packer fmt -check -diff
+          else
+            echo "No .pkr.hcl files found, skipping packer fmt check."
+            exit0
+          fi
 
       - name: Run packer validate
-        run: packer validate Packer.pkr.hcl
+        run: |
+          # Check if .pkr.hcl files exist
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, running packer fmt..."
+            packer validate Packer.pkr.hcl
+          else
+            echo "No .pkr.hcl files found, skipping packer fmt check."
+            exit0
+          fi
 
   build_custom_image:
     runs-on: ubuntu-latest
