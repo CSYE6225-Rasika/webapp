@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '*.pkr.hcl'
 
 jobs:
   packer_status_check:
@@ -12,16 +14,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run packer fmt
-        run: packer fmt -check -diff
+      - name: Check for .pkr.hcl files and format
+        run: |
+          # Check if .pkr.hcl files exist
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, running packer fmt..."
+            if packer fmt -check -diff -write=false; then
+              echo "Packer templates are properly formatted."
+            else
+              echo "Packer templates need formatting. Please format the templates using 'packer fmt' and push the changes."
+              exit 1
+            fi
+          else
+            echo "No .pkr.hcl files found, skipping packer fmt check."
+            exit 0
+          fi
 
       - name: Run packer validate
-        run: packer validate path/to/your/packer/template.json
+        run: |
+          # Check if .pkr.hcl files exist
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, running packer fmt..."
+            packer validate Packer.pkr.hcl
+          else
+            echo "No .pkr.hcl files found, skipping packer fmt check."
+            exit0
+          fi
 
   build_custom_image:
     runs-on: ubuntu-latest
     needs: packer_status_check
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.head.repo.default_branch, '.pkr.hcl')
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -37,10 +60,13 @@ jobs:
         run: |
           python setup.py sdist --format=gztar
 
-
       - name: Build custom image
         run: |
-          packer init Packer.pkr.hcl
-          packer build Packer.pkr.hcl
-
-    
+          # Check if .pkr.hcl files exist
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, building custom image..."
+            packer init Packer.pkr.hcl
+            packer build Packer.pkr.hcl
+          else
+            echo "No .pkr.hcl files found, skipping build custom image step."
+          fi
