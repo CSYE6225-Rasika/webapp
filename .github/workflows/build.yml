@@ -19,10 +19,15 @@ jobs:
           # Check if .pkr.hcl files exist
           if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
             echo ".pkr.hcl files found, running packer fmt..."
-            packer fmt -check -diff
+            if packer fmt -check -diff -write=false; then
+              echo "Packer templates are properly formatted."
+            else
+              echo "Packer templates need formatting. Please format the templates using 'packer fmt' and push the changes."
+              exit 1
+            fi
           else
             echo "No .pkr.hcl files found, skipping packer fmt check."
-            exit0
+            exit 0
           fi
 
       - name: Run packer validate
