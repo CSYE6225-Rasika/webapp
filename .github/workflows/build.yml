@@ -29,7 +29,9 @@ jobs:
             echo "No .pkr.hcl files found, skipping packer fmt check."
             exit 0
           fi
-
+      - name: Install packer plugin
+        run: |
+          packer init -plugins=packer-builder-googlecompute
       - name: Run packer validate
         run: |
           # Check if .pkr.hcl files exist
