@@ -11,13 +11,15 @@ jobs:
   packer_status_check:
     runs-on: ubuntu-latest
     steps:
-      
-
       - name: Check for .pkr.hcl files and format
         run: |
-          
-            if packer fmt -check -write=false *.pkr.hcl
-              
+          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
+            echo ".pkr.hcl files found, running packer fmt..."
+            packer fmt -check -write=false *.pkr.hcl
+          else
+            echo "No .pkr.hcl files found, skipping packer fmt check."
+            exit 0
+          fi
 
   build_custom_image:
     runs-on: ubuntu-latest
@@ -29,7 +31,7 @@ jobs:
       - name: Set up Python 3.6
         uses: actions/setup-python@v2
         with:
-          python-version: '3.13.0-alpha.4'
+          python-version: '3.9.x' # Adjust this to the appropriate Python version
 
       - name: Install dependencies
         run: |
@@ -38,24 +40,16 @@ jobs:
       - name: Build distribution package
         run: python3 setup.py sdist bdist_wheel
       
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v2'
+      - name: Authenticate with Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.SA_KEY }}'
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-
-      - name: Run packer validate
+      - name: Run packer validate and build
         run: |
-          # Check if .pkr.hcl files exist
-          if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
-            echo ".pkr.hcl files found, running packer fmt..."
-            packer init Packer.pkr.hcl
-            packer validate Packer.pkr.hcl
-            packer build Packer.pkr.hcl
-          else
-            echo "No .pkr.hcl files found, skipping packer fmt check."
-            exit 0
-          fi
+          packer validate Packer.pkr.hcl
+          packer build Packer.pkr.hcl
