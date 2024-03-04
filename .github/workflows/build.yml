@@ -16,7 +16,7 @@ jobs:
       - name: Check for .pkr.hcl files and format
         run: |
           
-            if packer fmt -check -write=false .
+            if packer fmt -check -write=false 
               
 
   build_custom_image:
