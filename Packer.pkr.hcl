@@ -1,5 +1,5 @@
 packer {
-  required_plugins {
+  required_plugins {;
     googlecompute = {
       version = ">= 1.1.4"
       source  = "github.com/hashicorp/googlecompute"
@@ -39,7 +39,7 @@ source "googlecompute" "csye6225-5" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
   zone                = var.zone
-  ssh_username        = var.ssh_username
+  ssh_username        = var. ssh_username
   image_name          = var.image_name
   instance_name       = var.instance_name
   disk_size           = 20
@@ -94,4 +94,6 @@ build {
       "sudo systemctl start csye6225"
     ]
   }
+
 }
+
