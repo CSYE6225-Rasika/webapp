@@ -15,7 +15,7 @@ jobs:
         run: |
           if [ -n "$(find . -name '*.pkr.hcl' -print -quit)" ]; then
             echo ".pkr.hcl files found, running packer fmt..."
-            packer fmt -check -write=false *.pkr.hcl
+            packer fmt -check -write=false Packer.pkr.hcl
           else
             echo "No .pkr.hcl files found, skipping packer fmt check."
             exit 0
@@ -51,5 +51,6 @@ jobs:
 
       - name: Run packer validate and build
         run: |
+          packer init Packer.pkr.hcl
           packer validate Packer.pkr.hcl
           packer build Packer.pkr.hcl
