@@ -39,7 +39,7 @@ source "googlecompute" "csye6225-5" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
   zone                = var.zone
-  ssh_username        = var. ssh_username
+  ssh_username        = var.ssh_username
   image_name          = var.image_name
   instance_name       = var.instance_name
   disk_size           = 20
