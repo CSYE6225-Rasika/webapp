@@ -6,6 +6,7 @@ packer {
     }
   }
 }
+
 variable "project_id" {
   default = "webapp-414216"
 }
@@ -34,7 +35,8 @@ variable "network" {
   default = "default"
 }
 
-source "googlecompute" "csye6225" {
+
+source "googlecompute" "csye6225-5" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
   zone                = var.zone
@@ -47,8 +49,12 @@ source "googlecompute" "csye6225" {
 
 build {
   sources = [
-    "googlecompute.csye6225"
+
+    "googlecompute.csye6225-5"
   ]
+
+
+
 
 
 
@@ -60,21 +66,14 @@ build {
       "sudo useradd -r -s /usr/sbin/nologin csye6225",
       "sudo mkdir -p /home/csye6225/application",
       "sudo chmod 777 /home/csye6225/application",
-      "sudo yum -y install postgresql-server postgresql-contrib",
       "sudo yum -y install python3",
       "sudo yum -y install python3-pip",
-      "sudo systemctl enable postgresql",
-      "sudo /usr/bin/postgresql-setup --initdb",
-      "sudo systemctl start postgresql",
-      "sudo sed -i 's/ident/trust/g' /var/lib/pgsql/data/pg_hba.conf",
-      "sudo systemctl restart postgresql",
-      "pip3 install setuptools",
-      "sudo chmod 777 /etc/systemd/system/",
-
-
-
+      "sudo chmod 777 /etc/systemd/system"
     ]
   }
+
+
+
   provisioner "file" {
     source      = "csye6225.service"
     destination = "/etc/systemd/system/csye6225.service"
@@ -105,10 +104,12 @@ build {
       "sleep 3",
       "sudo pip3 install /home/csye6225/application/healthcheck-0.1.tar.gz",
       "sudo systemctl daemon-reload",
-      "sudo  systemctl enable --now csye6225",
+      "sudo systemctl enable --now csye6225",
       "sudo systemctl start csye6225"
     ]
   }
 
 
 }
+
+
