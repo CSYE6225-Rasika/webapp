@@ -1,0 +1,2 @@
+[console_scripts]
+Application = healthcheck.Application:main

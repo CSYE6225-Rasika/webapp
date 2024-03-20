@@ -24,7 +24,7 @@ variable "ssh_username" {
 }
 
 variable "image_name" {
-  default = "centos8-custom-image"
+  default = "centos8-custom-image-6"
 }
 
 variable "instance_name" {
@@ -35,8 +35,7 @@ variable "network" {
   default = "default"
 }
 
-
-source "googlecompute" "csye6225-5" {
+source "googlecompute" "csye6225-6" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
   zone                = var.zone
@@ -44,21 +43,16 @@ source "googlecompute" "csye6225-5" {
   image_name          = var.image_name
   instance_name       = var.instance_name
   disk_size           = 20
-
+  
+  
 }
 
 build {
   sources = [
-
-    "googlecompute.csye6225-5"
+    "googlecompute.csye6225-6"
   ]
 
-
-
-
-
-
-
+  
 
   provisioner "shell" {
     inline = [
@@ -68,11 +62,14 @@ build {
       "sudo chmod 777 /home/csye6225/application",
       "sudo yum -y install python3",
       "sudo yum -y install python3-pip",
-      "sudo chmod 777 /etc/systemd/system"
+      "sudo chmod 777 /etc/systemd/system",
+      "sudo touch /etc/systemd/system/csye6225.log",
+      "curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh",
+      "sudo bash add-google-cloud-ops-agent-repo.sh --also-install",
+      "sudo systemctl start google-cloud-ops-agent.service",
+      "sudo pip3 install sendgrid"
     ]
   }
-
-
 
   provisioner "file" {
     source      = "csye6225.service"
@@ -89,14 +86,13 @@ build {
     destination = "/home/csye6225/application/requirements.txt"
   }
 
-
-
   provisioner "shell" {
     inline = [
-
       "sudo yum -y install python3-devel",
       "sudo yum groupinstall -y 'Development Tools'",
+      "sudo yum -y install postgresql-devel",
       "sudo pip3 install greenlet",
+      "sudo pip3 install --upgrade pip",
       "pip3 install --user -r /home/csye6225/application/requirements.txt",
       "sudo chown -R csye6225:csye6225 /home/csye6225/application/",
       "sudo chmod 777 /home/csye6225/application/",
@@ -108,8 +104,6 @@ build {
       "sudo systemctl start csye6225"
     ]
   }
-
-
 }
 
 
