@@ -35,6 +35,7 @@ variable "network" {
   default = "default"
 }
 
+
 source "googlecompute" "csye6225-5" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
@@ -43,12 +44,21 @@ source "googlecompute" "csye6225-5" {
   image_name          = var.image_name
   instance_name       = var.instance_name
   disk_size           = 20
+
 }
 
 build {
   sources = [
+
     "googlecompute.csye6225-5"
   ]
+
+
+
+
+
+
+
 
   provisioner "shell" {
     inline = [
@@ -61,6 +71,8 @@ build {
       "sudo chmod 777 /etc/systemd/system"
     ]
   }
+
+
 
   provisioner "file" {
     source      = "csye6225.service"
@@ -77,12 +89,14 @@ build {
     destination = "/home/csye6225/application/requirements.txt"
   }
 
+
+
   provisioner "shell" {
     inline = [
+
       "sudo yum -y install python3-devel",
       "sudo yum groupinstall -y 'Development Tools'",
       "sudo pip3 install greenlet",
-      "sudo pip3 install --upgrade pip",
       "pip3 install --user -r /home/csye6225/application/requirements.txt",
       "sudo chown -R csye6225:csye6225 /home/csye6225/application/",
       "sudo chmod 777 /home/csye6225/application/",
@@ -95,5 +109,7 @@ build {
     ]
   }
 
+
 }
+
 
