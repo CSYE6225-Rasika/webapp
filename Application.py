@@ -48,6 +48,28 @@ logger.setLevel(logging.INFO)  # Set log level to INFO
 
 
 
+# Configure logging client
+client = google.cloud.logging.Client()
+client.get_default_handler()
+client.setup_logging()
+
+# Define custom formatter to output logs as JSON
+class JsonFormatter(logging.Formatter):
+    def format(self, record):
+        log_data = {
+            'timestamp': self.formatTime(record),
+            'severity': record.levelname,
+            'message': record.getMessage(),
+        }
+        return json.dumps(log_data)
+
+# Create logger and set formatter
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+handler.setFormatter(JsonFormatter())
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)  # Set log level to INFO
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost:5432/user_databse'
@@ -144,10 +166,9 @@ def create_user():
     new_user.verification_email_sent = True
     db.session.add(new_user)
     db.session.commit()
-
     logger.info('User created successfully', extra={'user': new_user.username})
+
     return jsonify({'message': 'User created successfully. Email verification is required. Look out for an email.'}), 201
-    
 
 def basic_auth_required(f):
     @wraps(f)
