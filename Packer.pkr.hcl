@@ -24,7 +24,7 @@ variable "ssh_username" {
 }
 
 variable "image_name" {
-  default = "centos8-custom-image-6"
+  default = "centos8-custom-image-7"
 }
 
 variable "instance_name" {

@@ -11,7 +11,8 @@ setup(
         'flask-bcrypt',
         'sqlalchemy-utils',
         'psycopg2-binary',
-        'google-cloud-logging'
+        'google-cloud-logging',
+        'google-cloud-pubsub'
 
         
     ],

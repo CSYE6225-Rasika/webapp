@@ -11,3 +11,4 @@ requests
 Werkzeug==2.0.3
 Faker
 google-cloud-logging
+google-cloud-pubsub
