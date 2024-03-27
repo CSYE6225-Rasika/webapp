@@ -10,3 +10,5 @@ sqlalchemy-utils==0.37.7
 requests
 Werkzeug==2.0.3
 Faker
+google-cloud-logging
+google-cloud-pubsub

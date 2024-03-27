@@ -9,8 +9,10 @@ setup(
         'flask',
         'flask-sqlalchemy',
         'flask-bcrypt',
+        'sqlalchemy-utils',
         'psycopg2-binary',
-        'sqlalchemy-utils'
+        'google-cloud-logging',
+        'google-cloud-pubsub'
     ],
     entry_points={
         'console_scripts': [
