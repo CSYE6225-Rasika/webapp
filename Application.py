@@ -163,7 +163,7 @@ def create_user():
     publish_message_to_pubsub(message_payload)
     
     
-    new_user.verification_email_sent = True
+    
     db.session.add(new_user)
     db.session.commit()
     logger.info('User created successfully', extra={'user': new_user.username})
